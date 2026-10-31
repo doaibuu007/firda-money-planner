@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Smartphone, QrCode, Share, PlusSquare, Check, Copy, Sparkles, Monitor } from 'lucide-react';
+import { X, Smartphone, QrCode, Share, PlusSquare, Check, Copy, Sparkles, Monitor, Globe } from 'lucide-react';
 
 export default function IosGuideModal({
   isOpen,
@@ -8,17 +8,20 @@ export default function IosGuideModal({
   setIsIphonePreview
 }) {
   const [copied, setCopied] = useState(false);
+  const [qrMode, setQrMode] = useState('github'); // 'github' | 'wifi'
 
   if (!isOpen) return null;
 
-  // Detect current host or fallback to detected LAN IP
+  const githubPagesUrl = 'https://doaibuu007.github.io/firda-money-planner/';
   const lanIp = '192.168.110.171';
   const port = window.location.port || '5173';
-  const mobileUrl = `http://${lanIp}:${port}`;
-  const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&color=be185d&bgcolor=fdf2f8&margin=10&data=${encodeURIComponent(mobileUrl)}`;
+  const wifiUrl = `http://${lanIp}:${port}`;
+
+  const activeUrl = qrMode === 'github' ? githubPagesUrl : wifiUrl;
+  const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&color=be185d&bgcolor=fdf2f8&margin=10&data=${encodeURIComponent(activeUrl)}`;
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(mobileUrl);
+    navigator.clipboard.writeText(activeUrl);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -40,8 +43,8 @@ export default function IosGuideModal({
               <h3 className="text-base sm:text-lg font-bold text-rose-900 dark:text-pink-100">
                 Buka & Pasang di iPhone 🌸
               </h3>
-              <p className="text-2xs text-rose-500 dark:text-pink-300">
-                Akses langsung dari Safari iPhone atau aktifkan Simulator iPhone
+              <p className="text-[11px] text-rose-500 dark:text-pink-300">
+                Akses via Link Online GitHub Pages atau Wi-Fi Lokal
               </p>
             </div>
           </div>
@@ -56,13 +59,13 @@ export default function IosGuideModal({
         {/* Toggle Mode Preview Layar iPhone di Laptop */}
         <div className="p-4 mb-4 rounded-2xl bg-gradient-to-r from-rose-500 via-pink-500 to-rose-400 text-white shadow-md shadow-pink-200/50 dark:shadow-none flex items-center justify-between gap-3">
           <div>
-            <span className="text-2xs uppercase tracking-wider font-bold text-pink-100 flex items-center gap-1">
+            <span className="text-[10px] uppercase tracking-wider font-bold text-pink-100 flex items-center gap-1">
               <Sparkles size={11} /> Mode Tampilan Layar
             </span>
             <h4 className="text-sm font-extrabold mt-0.5">
               {isIphonePreview ? 'Mode Simulator iPhone Aktif 📱' : 'Lihat Tampilan Ukuran iPhone di Sini'}
             </h4>
-            <p className="text-2xs text-pink-100/90 mt-0.5">
+            <p className="text-[11px] text-pink-100/90 mt-0.5">
               Ubah tampilan layar ini menjadi bingkai iPhone 16 Pro Pink lengkap dengan Dynamic Island!
             </p>
           </div>
@@ -87,11 +90,40 @@ export default function IosGuideModal({
 
         {/* QR Code Section for Real iPhone */}
         <div className="p-4 rounded-2xl bg-pink-50/60 dark:bg-pink-900/20 border border-pink-100 dark:border-pink-800/70 flex flex-col items-center text-center mb-4">
+          
+          {/* Switcher: GitHub Pages Online vs Local Wi-Fi */}
+          <div className="grid grid-cols-2 gap-1.5 p-1 rounded-xl bg-white dark:bg-pink-900/50 border border-pink-200 dark:border-pink-800 w-full max-w-xs mb-3">
+            <button
+              type="button"
+              onClick={() => setQrMode('github')}
+              className={`py-1.5 px-2 rounded-lg text-[11px] font-bold flex items-center justify-center gap-1 transition cursor-pointer ${
+                qrMode === 'github'
+                  ? 'bg-rose-500 text-white shadow-xs'
+                  : 'text-rose-700 dark:text-pink-300'
+              }`}
+            >
+              <Globe size={12} /> Link Online GitHub
+            </button>
+            <button
+              type="button"
+              onClick={() => setQrMode('wifi')}
+              className={`py-1.5 px-2 rounded-lg text-[11px] font-bold flex items-center justify-center gap-1 transition cursor-pointer ${
+                qrMode === 'wifi'
+                  ? 'bg-rose-500 text-white shadow-xs'
+                  : 'text-rose-700 dark:text-pink-300'
+              }`}
+            >
+              <QrCode size={12} /> Wi-Fi Lokal
+            </button>
+          </div>
+
           <span className="text-xs font-bold text-rose-900 dark:text-pink-100 mb-1 flex items-center gap-1.5">
             <QrCode size={15} className="text-pink-500" /> Scan dengan Kamera iPhone Kamu
           </span>
-          <p className="text-2xs text-rose-600/80 dark:text-pink-300/80 mb-3 max-w-xs">
-            Pastikan iPhone terhubung ke <strong>Wi-Fi yang sama</strong> dengan laptop/PC ini, lalu arahkan kamera iPhone ke kode QR berikut:
+          <p className="text-[11px] text-rose-600/80 dark:text-pink-300/80 mb-3 max-w-xs">
+            {qrMode === 'github'
+              ? 'Bisa dibuka dari mana saja (Kuota Data / Wi-Fi apa saja) melalui GitHub Pages:'
+              : 'Pastikan iPhone terhubung ke Wi-Fi yang sama dengan laptop ini:'}
           </p>
 
           <div className="p-3 bg-white rounded-3xl shadow-md border-2 border-pink-200 mb-3">
@@ -103,13 +135,13 @@ export default function IosGuideModal({
           </div>
 
           {/* Link Copy */}
-          <div className="flex items-center gap-2 w-full max-w-xs bg-white dark:bg-pink-900/60 px-3 py-2 rounded-xl border border-pink-200 dark:border-pink-800">
+          <div className="flex items-center gap-2 w-full max-w-sm bg-white dark:bg-pink-900/60 px-3 py-2 rounded-xl border border-pink-200 dark:border-pink-800">
             <span className="text-xs font-bold text-rose-700 dark:text-pink-200 truncate grow text-left">
-              {mobileUrl}
+              {activeUrl}
             </span>
             <button
               onClick={handleCopy}
-              className="px-2.5 py-1 rounded-lg bg-pink-100 dark:bg-pink-800 text-rose-700 dark:text-pink-200 text-2xs font-bold flex items-center gap-1 hover:bg-pink-200 transition shrink-0"
+              className="px-2.5 py-1 rounded-lg bg-pink-100 dark:bg-pink-800 text-rose-700 dark:text-pink-200 text-[11px] font-bold flex items-center gap-1 hover:bg-pink-200 transition shrink-0 cursor-pointer"
             >
               {copied ? <Check size={12} /> : <Copy size={12} />}
               {copied ? 'Tersalin' : 'Salin'}
@@ -128,8 +160,8 @@ export default function IosGuideModal({
               <div className="w-7 h-7 rounded-full bg-rose-500 text-white font-bold flex items-center justify-center shrink-0 text-xs">
                 1
               </div>
-              <p className="text-rose-950 dark:text-pink-100 text-2xs sm:text-xs">
-                Buka tautan <strong>{mobileUrl}</strong> di aplikasi <strong>Safari</strong> iPhone.
+              <p className="text-rose-950 dark:text-pink-100 text-[11px] sm:text-xs">
+                Buka tautan di atas menggunakan aplikasi <strong>Safari</strong> di iPhone.
               </p>
             </div>
 
@@ -137,7 +169,7 @@ export default function IosGuideModal({
               <div className="w-7 h-7 rounded-full bg-rose-500 text-white font-bold flex items-center justify-center shrink-0 text-xs">
                 2
               </div>
-              <p className="text-rose-950 dark:text-pink-100 text-2xs sm:text-xs flex items-center gap-1 flex-wrap">
+              <p className="text-rose-950 dark:text-pink-100 text-[11px] sm:text-xs flex items-center gap-1 flex-wrap">
                 Ketuk tombol <strong>Bagikan (Share)</strong> <Share size={13} className="inline text-blue-500" /> di bagian bawah layar Safari.
               </p>
             </div>
@@ -146,8 +178,8 @@ export default function IosGuideModal({
               <div className="w-7 h-7 rounded-full bg-rose-500 text-white font-bold flex items-center justify-center shrink-0 text-xs">
                 3
               </div>
-              <p className="text-rose-950 dark:text-pink-100 text-2xs sm:text-xs flex items-center gap-1 flex-wrap">
-                Pilih <strong>"Tambah ke Layar Utama" (Add to Home Screen)</strong> <PlusSquare size={13} className="inline text-rose-500" /> lalu ketuk <strong>Tambah</strong>. Aplikasi akan muncul dengan ikon 🌸 seperti aplikasi iPhone asli!
+              <p className="text-rose-950 dark:text-pink-100 text-[11px] sm:text-xs flex items-center gap-1 flex-wrap">
+                Pilih <strong>"Tambah ke Layar Utama" (Add to Home Screen)</strong> <PlusSquare size={13} className="inline text-rose-500" /> lalu ketuk <strong>Tambah</strong>.
               </p>
             </div>
           </div>

@@ -95,6 +95,7 @@ export default function App() {
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
   const [isBackupModalOpen, setIsBackupModalOpen] = useState(false);
   const [isIosModalOpen, setIsIosModalOpen] = useState(false);
+  const [sideQrMode, setSideQrMode] = useState('github'); // 'github' | 'wifi'
 
   // Sync to localStorage
   useEffect(() => {
@@ -213,7 +214,9 @@ export default function App() {
   };
 
   const allCategories = [...expenseCategories, ...incomeCategories];
-  const mobileUrl = `http://192.168.110.171:${window.location.port || '5173'}`;
+  const githubPagesUrl = 'https://doaibuu007.github.io/firda-money-planner/';
+  const wifiUrl = `http://192.168.110.171:${window.location.port || '5173'}`;
+  const mobileUrl = sideQrMode === 'github' ? githubPagesUrl : wifiUrl;
   const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&color=be185d&bgcolor=fdf2f8&margin=8&data=${encodeURIComponent(mobileUrl)}`;
 
   // Main App Content (shared between direct mobile/desktop view and iPhone simulator frame)
@@ -439,6 +442,25 @@ export default function App() {
 
               {/* QR Code Box */}
               <div className="p-4 rounded-2xl bg-pink-50/80 dark:bg-pink-900/30 border border-pink-200 dark:border-pink-800 flex flex-col items-center text-center">
+                <div className="grid grid-cols-2 gap-1 p-1 rounded-xl bg-white dark:bg-pink-950 border border-pink-200 dark:border-pink-800 w-full mb-3">
+                  <button
+                    onClick={() => setSideQrMode('github')}
+                    className={`py-1 px-2 rounded-lg text-[10px] font-extrabold transition cursor-pointer ${
+                      sideQrMode === 'github' ? 'bg-rose-500 text-white' : 'text-rose-700 dark:text-pink-300'
+                    }`}
+                  >
+                    🌐 Link Online GitHub
+                  </button>
+                  <button
+                    onClick={() => setSideQrMode('wifi')}
+                    className={`py-1 px-2 rounded-lg text-[10px] font-extrabold transition cursor-pointer ${
+                      sideQrMode === 'wifi' ? 'bg-rose-500 text-white' : 'text-rose-700 dark:text-pink-300'
+                    }`}
+                  >
+                    📶 Wi-Fi Lokal
+                  </button>
+                </div>
+
                 <div className="p-2.5 bg-white rounded-2xl shadow-sm border border-pink-100 mb-2.5">
                   <img
                     src={qrImageUrl}
@@ -449,9 +471,14 @@ export default function App() {
                 <span className="text-[11px] font-bold text-rose-900 dark:text-pink-100">
                   Scan dengan Kamera iPhone
                 </span>
-                <code className="mt-1 px-3 py-1 rounded-lg bg-white dark:bg-pink-950 text-rose-600 dark:text-pink-300 text-xs font-extrabold border border-pink-200 dark:border-pink-800">
+                <a
+                  href={mobileUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-1 px-3 py-1 rounded-lg bg-white dark:bg-pink-950 text-rose-600 dark:text-pink-300 text-[11px] font-extrabold border border-pink-200 dark:border-pink-800 hover:underline break-all"
+                >
                   {mobileUrl}
-                </code>
+                </a>
               </div>
 
               {/* Quick Steps */}
