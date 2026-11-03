@@ -1,3 +1,5 @@
+import { getLocalDateString } from './utils/helpers';
+
 export const DEFAULT_EXPENSE_CATEGORIES = [
   { id: 'cat_food', name: 'Makanan & Jajan', icon: '🍰', color: '#f43f5e' },
   { id: 'cat_beauty', name: 'Skincare & Makeup', icon: '💄', color: '#ec4899' },
@@ -24,6 +26,8 @@ export const PAYMENT_METHODS = [
   { id: 'cash', name: 'Uang Tunai (Cash)', icon: '💵' },
 ];
 
+const daysAgo = (n) => getLocalDateString(new Date(Date.now() - n * 86400000));
+
 export const SAMPLE_TRANSACTIONS = [
   {
     id: 'tx-1',
@@ -31,7 +35,7 @@ export const SAMPLE_TRANSACTIONS = [
     amount: 5000000,
     category: 'Gaji Bulanan',
     categoryIcon: '💼',
-    date: new Date(Date.now() - 5 * 86400000).toISOString().split('T')[0],
+    date: daysAgo(5),
     note: 'Gaji pokok bulan ini ✨',
     paymentMethod: 'Transfer Bank'
   },
@@ -41,7 +45,7 @@ export const SAMPLE_TRANSACTIONS = [
     amount: 45000,
     category: 'Nongkrong & Kopi',
     categoryIcon: '☕',
-    date: new Date(Date.now() - 4 * 86400000).toISOString().split('T')[0],
+    date: daysAgo(4),
     note: 'Iced Caramel Macchiato with friends',
     paymentMethod: 'QRIS / E-Wallet'
   },
@@ -51,7 +55,7 @@ export const SAMPLE_TRANSACTIONS = [
     amount: 185000,
     category: 'Skincare & Makeup',
     categoryIcon: '💄',
-    date: new Date(Date.now() - 3 * 86400000).toISOString().split('T')[0],
+    date: daysAgo(3),
     note: 'Sunscreen & Cushion refill',
     paymentMethod: 'ShopeePay / GoPay'
   },
@@ -61,7 +65,7 @@ export const SAMPLE_TRANSACTIONS = [
     amount: 75000,
     category: 'Makanan & Jajan',
     categoryIcon: '🍰',
-    date: new Date(Date.now() - 2 * 86400000).toISOString().split('T')[0],
+    date: daysAgo(2),
     note: 'Seblak komplit + boba manis',
     paymentMethod: 'Uang Tunai (Cash)'
   },
@@ -71,7 +75,7 @@ export const SAMPLE_TRANSACTIONS = [
     amount: 350000,
     category: 'Side Hustle / Usaha',
     categoryIcon: '🎀',
-    date: new Date(Date.now() - 1 * 86400000).toISOString().split('T')[0],
+    date: daysAgo(1),
     note: 'Hasil jualan jepit & gelang handmade',
     paymentMethod: 'QRIS / E-Wallet'
   },
@@ -81,7 +85,7 @@ export const SAMPLE_TRANSACTIONS = [
     amount: 120000,
     category: 'Fashion & Belanja',
     categoryIcon: '🛍️',
-    date: new Date().toISOString().split('T')[0],
+    date: daysAgo(0),
     note: 'Cardigan rajut warna soft pink 🌸',
     paymentMethod: 'ShopeePay / GoPay'
   }

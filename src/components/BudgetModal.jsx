@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Check, Sparkles } from 'lucide-react';
 import { formatRupiah } from '../utils/helpers';
 
@@ -11,21 +11,36 @@ export default function BudgetModal({
 }) {
   const [localBudgets, setLocalBudgets] = useState({ ...budgets });
 
+  // Sync localBudgets whenever modal opens or budgets prop changes
+  useEffect(() => {
+    if (isOpen) {
+      setLocalBudgets({ ...budgets });
+    }
+  }, [budgets, isOpen]);
+
   if (!isOpen) return null;
 
   const handleChange = (catName, val) => {
     const num = Math.max(0, Number(val) || 0);
-    setLocalBudgets(prev => ({
+    setLocalBudgets((prev) => ({
       ...prev,
       [catName]: num
     }));
   };
 
-  const totalCalculatedBudget = Object.values(localBudgets).reduce((sum, v) => sum + (Number(v) || 0), 0);
+  // Only sum budgets of active expenseCategories
+  const totalCalculatedBudget = expenseCategories.reduce(
+    (sum, c) => sum + (Number(localBudgets[c.name]) || 0),
+    0
+  );
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSaveBudgets(localBudgets);
+    const cleaned = {};
+    expenseCategories.forEach((c) => {
+      cleaned[c.name] = Number(localBudgets[c.name]) || 0;
+    });
+    onSaveBudgets(cleaned);
     onClose();
   };
 
@@ -51,6 +66,7 @@ export default function BudgetModal({
           </div>
           <button
             onClick={onClose}
+            aria-label="Tutup modal budget"
             className="p-2 rounded-full text-gray-400 hover:text-rose-500 bg-pink-50 dark:bg-pink-900/50 transition"
           >
             <X size={18} />

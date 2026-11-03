@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
-import { X, Download, Upload, RefreshCw, Trash2, FileSpreadsheet, FileJson, CheckCircle, Smartphone } from 'lucide-react';
-import { exportToCSV, exportToJSON } from '../utils/helpers';
+import { X, Download, Upload, RefreshCw, Trash2, FileSpreadsheet, FileJson, CheckCircle, AlertCircle, Smartphone } from 'lucide-react';
+import { exportToCSV, exportToJSON, validateBackupPayload } from '../utils/helpers';
 
 export default function BackupModal({ 
   isOpen, 
@@ -15,7 +15,7 @@ export default function BackupModal({
   onOpenIosModal
 }) {
   const fileInputRef = useRef(null);
-  const [importStatus, setImportStatus] = useState('');
+  const [importStatus, setImportStatus] = useState({ message: '', isError: false });
 
   if (!isOpen) return null;
 
@@ -25,7 +25,7 @@ export default function BackupModal({
 
   const handleDownloadJSON = () => {
     const backupData = {
-      version: '1.0',
+      version: '2.0',
       exportedAt: new Date().toISOString(),
       transactions,
       budgets,
@@ -43,18 +43,18 @@ export default function BackupModal({
     reader.onload = (event) => {
       try {
         const parsed = JSON.parse(event.target.result);
-        if (parsed.transactions && Array.isArray(parsed.transactions)) {
+        if (validateBackupPayload(parsed)) {
           onRestoreData(parsed);
-          setImportStatus('Data berhasil di-restore! ✨');
+          setImportStatus({ message: 'Data berhasil di-restore! ✨', isError: false });
           setTimeout(() => {
-            setImportStatus('');
+            setImportStatus({ message: '', isError: false });
             onClose();
           }, 1200);
         } else {
-          setImportStatus('Format file backup tidak valid.');
+          setImportStatus({ message: 'Format file backup tidak lengkap atau tidak valid.', isError: true });
         }
       } catch (err) {
-        setImportStatus('Gagal membaca file JSON.');
+        setImportStatus({ message: 'Gagal membaca file JSON.', isError: true });
       }
     };
     reader.readAsText(file);
@@ -82,15 +82,21 @@ export default function BackupModal({
           </div>
           <button
             onClick={onClose}
+            aria-label="Tutup menu data"
             className="p-2 rounded-full text-gray-400 hover:text-rose-500 bg-pink-50 dark:bg-pink-900/50 transition"
           >
             <X size={18} />
           </button>
         </div>
 
-        {importStatus && (
-          <div className="p-3 mb-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-xs text-emerald-700 dark:text-emerald-300 font-semibold flex items-center gap-2">
-            <CheckCircle size={15} /> {importStatus}
+        {importStatus.message && (
+          <div className={`p-3 mb-4 rounded-2xl border text-xs font-semibold flex items-center gap-2 ${
+            importStatus.isError
+              ? 'bg-rose-50 dark:bg-rose-950/40 border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300'
+              : 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300'
+          }`}>
+            {importStatus.isError ? <AlertCircle size={15} /> : <CheckCircle size={15} />}
+            <span>{importStatus.message}</span>
           </div>
         )}
 
@@ -195,10 +201,8 @@ export default function BackupModal({
             </div>
             <button
               onClick={() => {
-                if (window.confirm('Muat ulang data contoh simulasi manis?')) {
-                  onLoadSampleData();
-                  onClose();
-                }
+                onLoadSampleData();
+                onClose();
               }}
               className="px-3 py-1.5 rounded-xl bg-white dark:bg-pink-900 text-pink-600 dark:text-pink-300 border border-pink-200 dark:border-pink-800 text-xs font-bold hover:bg-pink-50 active:scale-95 transition flex items-center gap-1 shrink-0 cursor-pointer"
             >

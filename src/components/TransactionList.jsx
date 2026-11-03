@@ -6,26 +6,32 @@ import {
   Calendar,
   CreditCard,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Plus,
+  Sparkles
 } from 'lucide-react';
-import { formatRupiah, formatDateIndo } from '../utils/helpers';
+import { formatRupiah, formatDateIndo, getLocalDateString, parseLocalDate } from '../utils/helpers';
 
 export default function TransactionList({ 
   transactions, 
   onEditTransaction, 
   onDeleteTransaction,
+  onOpenAddModal,
+  onLoadSampleData,
   categories 
 }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedType, setSelectedType] = useState('all'); // all, expense, income
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [selectedTimeRange, setSelectedTimeRange] = useState('all'); // all, today, 7days, thisMonth
+  const [selectedTimeRange, setSelectedTimeRange] = useState('all'); // all, today, 7days, thisMonth, custom
+  const [customStartDate, setCustomStartDate] = useState('');
+  const [customEndDate, setCustomEndDate] = useState('');
   const [sortBy, setSortBy] = useState('date-desc');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
 
   const filteredTransactions = useMemo(() => {
-    return transactions.filter(t => {
+    return transactions.filter((t) => {
       if (selectedType !== 'all' && t.type !== selectedType) return false;
       if (selectedCategory !== 'all' && t.category !== selectedCategory) return false;
 
@@ -39,32 +45,34 @@ export default function TransactionList({
       }
 
       if (selectedTimeRange !== 'all') {
-        const txDate = new Date(t.date);
+        const txDate = parseLocalDate(t.date);
         const now = new Date();
-        const todayStr = now.toISOString().split('T')[0];
+        const todayStr = getLocalDateString(now);
 
         if (selectedTimeRange === 'today') {
           if (t.date !== todayStr) return false;
         } else if (selectedTimeRange === '7days') {
-          const diffTime = Math.abs(now - txDate);
-          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-          if (diffDays > 7) return false;
+          const diffDays = Math.floor((now - txDate) / 86400000);
+          if (diffDays < 0 || diffDays > 7) return false;
         } else if (selectedTimeRange === 'thisMonth') {
           if (txDate.getMonth() !== now.getMonth() || txDate.getFullYear() !== now.getFullYear()) {
             return false;
           }
+        } else if (selectedTimeRange === 'custom') {
+          if (customStartDate && t.date < customStartDate) return false;
+          if (customEndDate && t.date > customEndDate) return false;
         }
       }
 
       return true;
     }).sort((a, b) => {
-      if (sortBy === 'date-desc') return new Date(b.date) - new Date(a.date);
-      if (sortBy === 'date-asc') return new Date(a.date) - new Date(b.date);
+      if (sortBy === 'date-desc') return parseLocalDate(b.date) - parseLocalDate(a.date);
+      if (sortBy === 'date-asc') return parseLocalDate(a.date) - parseLocalDate(b.date);
       if (sortBy === 'amount-desc') return b.amount - a.amount;
       if (sortBy === 'amount-asc') return a.amount - b.amount;
       return 0;
     });
-  }, [transactions, searchTerm, selectedType, selectedCategory, selectedTimeRange, sortBy]);
+  }, [transactions, searchTerm, selectedType, selectedCategory, selectedTimeRange, customStartDate, customEndDate, sortBy]);
 
   const totalPages = Math.ceil(filteredTransactions.length / itemsPerPage) || 1;
   const paginatedList = useMemo(() => {
@@ -77,6 +85,8 @@ export default function TransactionList({
     setSelectedType('all');
     setSelectedCategory('all');
     setSelectedTimeRange('all');
+    setCustomStartDate('');
+    setCustomEndDate('');
     setSortBy('date-desc');
     setCurrentPage(1);
   };
@@ -152,7 +162,7 @@ export default function TransactionList({
             onChange={(e) => { setSelectedCategory(e.target.value); setCurrentPage(1); }}
             className="w-full px-2.5 py-2 rounded-2xl bg-pink-50/50 dark:bg-pink-900/30 border border-pink-100 dark:border-pink-800 text-xs text-rose-950 dark:text-pink-100 focus:outline-hidden focus:ring-2 focus:ring-pink-400 transition truncate"
           >
-            <option value="all">Kategori</option>
+            <option value="all">Semua Kategori</option>
             {categories.map((c, i) => (
               <option key={i} value={c.name}>
                 {c.icon} {c.name}
@@ -170,6 +180,7 @@ export default function TransactionList({
             <option value="today">Hari Ini</option>
             <option value="7days">7 Hari</option>
             <option value="thisMonth">Bulan Ini</option>
+            <option value="custom">Pilih Tanggal...</option>
           </select>
 
           {/* 4. Sort By */}
@@ -185,6 +196,34 @@ export default function TransactionList({
           </select>
         </div>
       </div>
+
+      {/* Custom Date Range Inputs */}
+      {selectedTimeRange === 'custom' && (
+        <div className="grid grid-cols-2 gap-2.5 p-3 mb-4 rounded-2xl bg-pink-50/60 dark:bg-pink-900/25 border border-pink-100 dark:border-pink-800">
+          <div>
+            <label className="block text-[10px] font-bold text-rose-700 dark:text-pink-300 mb-1">
+              Dari Tanggal:
+            </label>
+            <input
+              type="date"
+              value={customStartDate}
+              onChange={(e) => { setCustomStartDate(e.target.value); setCurrentPage(1); }}
+              className="w-full px-2.5 py-1.5 rounded-xl bg-white dark:bg-pink-950 border border-pink-200 dark:border-pink-800 text-xs text-rose-950 dark:text-pink-100"
+            />
+          </div>
+          <div>
+            <label className="block text-[10px] font-bold text-rose-700 dark:text-pink-300 mb-1">
+              Sampai Tanggal:
+            </label>
+            <input
+              type="date"
+              value={customEndDate}
+              onChange={(e) => { setCustomEndDate(e.target.value); setCurrentPage(1); }}
+              className="w-full px-2.5 py-1.5 rounded-xl bg-white dark:bg-pink-950 border border-pink-200 dark:border-pink-800 text-xs text-rose-950 dark:text-pink-100"
+            />
+          </div>
+        </div>
+      )}
 
       {/* Transaction Items */}
       {paginatedList.length > 0 ? (
@@ -243,6 +282,7 @@ export default function TransactionList({
                   <div className="flex items-center gap-1">
                     <button
                       onClick={() => onEditTransaction(item)}
+                      aria-label={`Edit transaksi ${item.category}`}
                       className="p-1.5 rounded-xl text-rose-600 dark:text-pink-300 bg-white/80 dark:bg-pink-900/50 hover:bg-pink-100 border border-pink-100 dark:border-pink-800 active:scale-90 transition"
                       title="Edit Transaksi"
                     >
@@ -250,6 +290,7 @@ export default function TransactionList({
                     </button>
                     <button
                       onClick={() => onDeleteTransaction(item.id)}
+                      aria-label={`Hapus transaksi ${item.category}`}
                       className="p-1.5 rounded-xl text-red-500 bg-white/80 dark:bg-pink-900/50 hover:bg-red-50 border border-pink-100 dark:border-pink-800 active:scale-90 transition"
                       title="Hapus Transaksi"
                     >
@@ -261,6 +302,35 @@ export default function TransactionList({
               </div>
             );
           })}
+        </div>
+      ) : transactions.length === 0 ? (
+        /* Clean Welcome Empty State for First-Time Users */
+        <div className="py-10 px-4 text-center">
+          <div className="text-4xl mb-2">🌸</div>
+          <p className="text-sm sm:text-base font-bold text-rose-900 dark:text-pink-100">
+            Dompetmu Masih Bersih & Kosong
+          </p>
+          <p className="text-xs text-rose-500/80 dark:text-pink-300/80 mt-1 mb-4 max-w-sm mx-auto">
+            Yuk mulai catat pengeluaran atau pemasukan pertamamu hari ini, atau coba muat data simulasi contoh! 💕
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            {onOpenAddModal && (
+              <button
+                onClick={onOpenAddModal}
+                className="px-4 py-2 rounded-2xl bg-gradient-to-r from-rose-500 to-pink-500 text-white text-xs font-bold shadow-sm hover:from-rose-600 hover:to-pink-600 active:scale-95 transition flex items-center gap-1.5 cursor-pointer"
+              >
+                <Plus size={14} /> Catat Transaksi Pertama
+              </button>
+            )}
+            {onLoadSampleData && (
+              <button
+                onClick={onLoadSampleData}
+                className="px-4 py-2 rounded-2xl bg-pink-100 dark:bg-pink-900 text-rose-700 dark:text-pink-200 text-xs font-bold hover:bg-pink-200 active:scale-95 transition flex items-center gap-1.5 cursor-pointer"
+              >
+                <Sparkles size={14} /> Coba Data Contoh (Demo)
+              </button>
+            )}
+          </div>
         </div>
       ) : (
         <div className="py-10 text-center">
@@ -288,15 +358,17 @@ export default function TransactionList({
           </span>
           <div className="flex items-center gap-1.5">
             <button
-              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
+              aria-label="Halaman sebelumnya"
               className="p-1.5 rounded-xl border border-pink-200 dark:border-pink-800 disabled:opacity-30 hover:bg-pink-100 active:scale-90 transition"
             >
               <ChevronLeft size={16} />
             </button>
             <button
-              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
+              aria-label="Halaman berikutnya"
               className="p-1.5 rounded-xl border border-pink-200 dark:border-pink-800 disabled:opacity-30 hover:bg-pink-100 active:scale-90 transition"
             >
               <ChevronRight size={16} />

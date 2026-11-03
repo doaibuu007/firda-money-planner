@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Enable class-based dark mode in Tailwind CSS v4 */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
   html {
     -webkit-tap-highlight-color: transparent;
@@ -7,7 +10,7 @@
   }
 
   body {
-    @apply bg-pink-50/40 text-rose-950 font-sans min-h-screen antialiased selection:bg-pink-300 selection:text-pink-900;
+    @apply bg-pink-50/40 dark:bg-[#1a0f18] text-rose-950 dark:text-pink-100 font-sans min-h-screen antialiased selection:bg-pink-300 selection:text-pink-900;
     font-family: 'Quicksand', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     overscroll-behavior-y: none;
   }

@@ -47,7 +47,8 @@ export default function Navbar({
                   Firda Planner
                 </h1>
                 <span className="text-[10px] px-2 py-0.5 rounded-full bg-pink-100 dark:bg-pink-900/80 text-pink-700 dark:text-pink-300 font-bold border border-pink-200 dark:border-pink-800 flex items-center gap-1 shrink-0">
-                  <Heart size={9} className="fill-pink-500 text-pink-500 animate-pulse" /> iOS
+                  <Heart size={9} className="fill-pink-500 text-pink-500 animate-pulse" />
+                  <span>{isIphonePreview ? 'iOS' : 'Daily'}</span>
                 </span>
               </div>
               <p className="text-[11px] text-rose-500/80 dark:text-pink-300/70 font-medium flex items-center gap-1 truncate">
@@ -60,6 +61,7 @@ export default function Navbar({
           <div className={`${isIphonePreview ? 'flex' : 'flex md:hidden'} items-center gap-1.5 shrink-0`}>
             <button
               onClick={onOpenCategoryModal}
+              aria-label="Kelola kategori"
               className="p-2 rounded-xl text-rose-600 dark:text-pink-200 bg-pink-50 dark:bg-pink-900/40 border border-pink-200/70 dark:border-pink-800 active:scale-90 transition text-xs font-bold flex items-center gap-1"
               title="Kategori"
             >
@@ -67,6 +69,7 @@ export default function Navbar({
             </button>
             <button
               onClick={onOpenIosModal}
+              aria-label="Akses iPhone dan QR Code"
               className="p-2 rounded-xl text-rose-600 dark:text-pink-200 bg-pink-50 dark:bg-pink-900/40 border border-pink-200/70 dark:border-pink-800 active:scale-90 transition"
               title="Akses iPhone / QR"
             >
@@ -74,6 +77,7 @@ export default function Navbar({
             </button>
             <button
               onClick={() => setIsDarkMode(!isDarkMode)}
+              aria-label={isDarkMode ? 'Aktifkan mode terang' : 'Aktifkan mode gelap'}
               className="p-2 rounded-xl text-rose-600 dark:text-pink-200 bg-pink-50 dark:bg-pink-900/40 border border-pink-200/70 dark:border-pink-800 active:scale-90 transition"
               title="Mode Terang / Gelap"
             >
@@ -145,6 +149,7 @@ export default function Navbar({
 
                 <button
                   onClick={() => setIsDarkMode(!isDarkMode)}
+                  aria-label={isDarkMode ? 'Aktifkan mode terang' : 'Aktifkan mode gelap'}
                   className="p-2 rounded-xl text-rose-600 dark:text-pink-200 bg-rose-50 dark:bg-pink-900/40 hover:bg-rose-100 border border-pink-200 dark:border-pink-800 transition flex items-center cursor-pointer"
                 >
                   {isDarkMode ? <Sun size={15} /> : <Moon size={15} />}

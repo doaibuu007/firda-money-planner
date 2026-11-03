@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Sparkles, Heart, Calendar, CreditCard } from 'lucide-react';
-import { formatRupiah } from '../utils/helpers';
+import { formatRupiah, getLocalDateString } from '../utils/helpers';
 import confetti from 'canvas-confetti';
 
 export default function TransactionModal({ 
@@ -16,7 +16,7 @@ export default function TransactionModal({
   const [amount, setAmount] = useState('');
   const [category, setCategory] = useState('');
   const [categoryIcon, setCategoryIcon] = useState('🌸');
-  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+  const [date, setDate] = useState(getLocalDateString());
   const [paymentMethod, setPaymentMethod] = useState('QRIS / E-Wallet');
   const [note, setNote] = useState('');
   const [error, setError] = useState('');
@@ -36,7 +36,7 @@ export default function TransactionModal({
       const defaultCat = expenseCategories[0];
       setCategory(defaultCat ? defaultCat.name : '');
       setCategoryIcon(defaultCat ? defaultCat.icon : '🌸');
-      setDate(new Date().toISOString().split('T')[0]);
+      setDate(getLocalDateString());
       setPaymentMethod('QRIS / E-Wallet');
       setNote('');
     }
@@ -121,6 +121,7 @@ export default function TransactionModal({
           </div>
           <button
             onClick={onClose}
+            aria-label="Tutup form transaksi"
             className="p-2 rounded-full text-gray-400 hover:text-rose-500 bg-pink-50 dark:bg-pink-900/50 transition"
           >
             <X size={18} />

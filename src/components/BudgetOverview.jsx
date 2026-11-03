@@ -1,6 +1,6 @@
 import React from 'react';
 import { AlertCircle, ChevronRight, SlidersHorizontal } from 'lucide-react';
-import { formatRupiah } from '../utils/helpers';
+import { formatRupiah, parseLocalDate } from '../utils/helpers';
 
 export default function BudgetOverview({ 
   budgets, 
@@ -13,36 +13,34 @@ export default function BudgetOverview({
   const currentMonth = now.getMonth();
   const currentYear = now.getFullYear();
 
-  const currentMonthExpenses = transactions.filter(t => {
+  const currentMonthExpenses = transactions.filter((t) => {
     if (t.type !== 'expense') return false;
-    const d = new Date(t.date);
+    const d = parseLocalDate(t.date);
     return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
   });
 
   const categorySpent = {};
-  currentMonthExpenses.forEach(t => {
+  currentMonthExpenses.forEach((t) => {
     categorySpent[t.category] = (categorySpent[t.category] || 0) + Number(t.amount);
   });
 
-  const budgetEntries = Object.entries(budgets)
-    .filter(([_, limit]) => Number(limit) > 0)
-    .map(([catName, limit]) => {
-      const spent = categorySpent[catName] || 0;
-      const percentage = Math.round((spent / Number(limit)) * 100);
-      const remaining = Number(limit) - spent;
-      const catConfig = expenseCategories.find(c => c.name === catName) || {
-        icon: '🌸',
-        color: '#f43f5e'
-      };
+  // Only show budgets for categories that exist in expenseCategories and have limit > 0
+  const budgetEntries = expenseCategories
+    .filter((c) => Number(budgets[c.name]) > 0)
+    .map((c) => {
+      const limit = Number(budgets[c.name]);
+      const spent = categorySpent[c.name] || 0;
+      const percentage = Math.round((spent / limit) * 100);
+      const remaining = limit - spent;
 
       return {
-        name: catName,
-        limit: Number(limit),
+        name: c.name,
+        limit,
         spent,
         percentage,
         remaining,
-        icon: catConfig.icon,
-        color: catConfig.color
+        icon: c.icon,
+        color: c.color
       };
     });
 

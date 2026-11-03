@@ -5,7 +5,9 @@ export default function IosGuideModal({
   isOpen,
   onClose,
   isIphonePreview,
-  setIsIphonePreview
+  setIsIphonePreview,
+  lanIp,
+  setLanIp
 }) {
   const [copied, setCopied] = useState(false);
   const [qrMode, setQrMode] = useState('github'); // 'github' | 'wifi'
@@ -13,7 +15,6 @@ export default function IosGuideModal({
   if (!isOpen) return null;
 
   const githubPagesUrl = 'https://doaibuu007.github.io/firda-money-planner/';
-  const lanIp = '192.168.110.171';
   const port = window.location.port || '5173';
   const wifiUrl = `http://${lanIp}:${port}`;
 
@@ -50,6 +51,7 @@ export default function IosGuideModal({
           </div>
           <button
             onClick={onClose}
+            aria-label="Tutup panduan iPhone"
             className="p-2 rounded-full text-gray-400 hover:text-rose-500 bg-pink-50 dark:bg-pink-900/50 transition"
           >
             <X size={18} />
@@ -116,6 +118,19 @@ export default function IosGuideModal({
               <QrCode size={12} /> Wi-Fi Lokal
             </button>
           </div>
+
+          {qrMode === 'wifi' && setLanIp && (
+            <div className="flex items-center gap-2 mb-2.5 w-full max-w-xs">
+              <span className="text-[11px] font-bold text-rose-700 dark:text-pink-300 shrink-0">IP Laptop:</span>
+              <input
+                type="text"
+                value={lanIp}
+                onChange={(e) => setLanIp(e.target.value)}
+                placeholder="192.168.x.x"
+                className="w-full px-2.5 py-1 rounded-lg bg-white dark:bg-pink-950 border border-pink-200 dark:border-pink-800 text-xs font-bold text-rose-900 dark:text-pink-100"
+              />
+            </div>
+          )}
 
           <span className="text-xs font-bold text-rose-900 dark:text-pink-100 mb-1 flex items-center gap-1.5">
             <QrCode size={15} className="text-pink-500" /> Scan dengan Kamera iPhone Kamu
