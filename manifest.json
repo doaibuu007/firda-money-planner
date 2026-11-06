@@ -1,0 +1,29 @@
+{
+  "name": "Firda Money Planner 🌸",
+  "short_name": "Firda Planner",
+  "description": "Aplikasi pencatat pengeluaran dan keuangan harian bernuansa pink feminin",
+  "start_url": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fdf2f8",
+  "theme_color": "#f43f5e",
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
