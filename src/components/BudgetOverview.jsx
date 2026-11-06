@@ -46,15 +46,15 @@ export default function BudgetOverview({
 
   if (budgetEntries.length === 0) {
     return (
-      <div className="rounded-3xl bg-white dark:bg-pink-950/40 p-5 border border-pink-100 dark:border-pink-900/50 shadow-xs mb-5 text-center">
+      <div className="rounded-2xl bg-white dark:bg-[#1a0f18] p-5 border border-pink-100 dark:border-pink-900/50 shadow-xs mb-5 text-center">
         <div className="text-3xl mb-2">🎯</div>
         <h4 className="text-sm font-bold text-rose-900 dark:text-pink-200">Belum Ada Budget Bulanan</h4>
-        <p className="text-xs text-rose-600/70 dark:text-pink-300/70 max-w-md mx-auto mt-1 mb-3">
+        <p className="text-xs text-rose-700/80 dark:text-pink-300/80 max-w-md mx-auto mt-1 mb-3">
           Atur batas pengeluaran untuk jajan, fashion, atau skincare agar keuangan kamu tetap terkontrol! 💕
         </p>
         <button
           onClick={onOpenBudgetModal}
-          className="px-4 py-2 rounded-2xl bg-pink-100 dark:bg-pink-900 text-rose-700 dark:text-pink-200 text-xs font-bold hover:bg-pink-200 transition inline-flex items-center gap-1.5 cursor-pointer"
+          className="px-4 py-2 rounded-xl bg-pink-100 dark:bg-pink-900 text-rose-700 dark:text-pink-200 text-xs font-bold hover:bg-pink-200 transition inline-flex items-center gap-1.5 cursor-pointer"
         >
           <SlidersHorizontal size={14} /> Atur Budget Sekarang
         </button>
@@ -63,7 +63,7 @@ export default function BudgetOverview({
   }
 
   return (
-    <div className="rounded-3xl bg-white dark:bg-pink-950/40 p-4 sm:p-6 border border-pink-100 dark:border-pink-900/50 shadow-xs mb-5">
+    <div className="rounded-2xl bg-white dark:bg-[#1a0f18] p-4 sm:p-6 border border-pink-100 dark:border-pink-900/50 shadow-xs mb-5">
       <div className="flex items-center justify-between mb-3.5">
         <div className="flex items-center gap-2 min-w-0">
           <div className="w-8 h-8 rounded-xl bg-pink-100 dark:bg-pink-900/60 text-pink-600 dark:text-pink-300 flex items-center justify-center text-sm font-bold shrink-0">
@@ -73,14 +73,15 @@ export default function BudgetOverview({
             <h3 className="text-xs sm:text-base font-bold text-rose-900 dark:text-pink-100 truncate">
               Budget Kategori Bulan Ini
             </h3>
-            <p className="text-[11px] text-rose-500/80 dark:text-pink-300/70 font-medium truncate">
-              Geser untuk cek sisa kuota jajan ✨
+            <p className="text-[11px] text-rose-700/80 dark:text-pink-300/80 font-medium truncate">
+              Geser untuk cek sisa kuota jajan
             </p>
           </div>
         </div>
 
         <button
           onClick={onOpenBudgetModal}
+          aria-label="Atur target budget kategori"
           className="text-xs font-bold text-rose-600 dark:text-pink-300 hover:text-rose-800 flex items-center gap-0.5 py-1.5 px-2.5 rounded-xl bg-pink-50 dark:bg-pink-900/30 border border-pink-200 dark:border-pink-800 transition cursor-pointer shrink-0 active:scale-95"
         >
           <span>Atur</span>
@@ -101,7 +102,7 @@ export default function BudgetOverview({
           return (
             <div 
               key={idx}
-              className={`snap-start shrink-0 w-[235px] ${isIphonePreview ? '' : 'md:w-auto'} p-3.5 rounded-2xl border transition-all ${
+              className={`snap-start shrink-0 w-[235px] ${isIphonePreview ? '' : 'md:w-auto'} p-3.5 rounded-xl border transition-all ${
                 isOver 
                   ? 'bg-rose-50/70 dark:bg-rose-950/30 border-rose-200 dark:border-rose-900/70' 
                   : isWarning 
@@ -140,10 +141,11 @@ export default function BudgetOverview({
               </div>
 
               <div className="flex items-center justify-between text-[11px]">
-                <span className="text-gray-500 dark:text-pink-300/70">
+                <span className="text-rose-800/80 dark:text-pink-200/90">
                   <strong className="text-rose-900 dark:text-pink-100">{formatRupiah(item.spent)}</strong>
                 </span>
-                <span className="text-gray-400 dark:text-pink-400">
+                {/* R-25: High contrast text on secondary label */}
+                <span className="text-rose-700/70 dark:text-pink-300/80">
                   / {formatRupiah(item.limit)}
                 </span>
               </div>

@@ -15,12 +15,43 @@
     overscroll-behavior-y: none;
   }
 
+  /* R-39: Interactive controls must show cursor: pointer by default */
+  button,
+  a[href],
+  select,
+  summary,
+  label[for],
+  input[type="checkbox"],
+  input[type="radio"],
+  [role="button"],
+  [role="tab"] {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  input:disabled,
+  select:disabled {
+    cursor: not-allowed;
+  }
+
   /* Prevent iOS Safari from auto-zooming when tapping inputs on iPhone */
   @media screen and (max-width: 768px) {
     input,
     select,
     textarea {
       font-size: 16px !important;
+    }
+  }
+
+  /* R-39: Stop non-essential motion under prefers-reduced-motion */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
     }
   }
 }

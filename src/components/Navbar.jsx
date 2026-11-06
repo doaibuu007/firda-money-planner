@@ -1,6 +1,6 @@
 import React from 'react';
 import { 
-  Sparkles, 
+  LayoutDashboard, 
   Plus, 
   PieChart, 
   SlidersHorizontal, 
@@ -47,8 +47,8 @@ export default function Navbar({
                   Firda Planner
                 </h1>
                 <span className="text-[10px] px-2 py-0.5 rounded-full bg-pink-100 dark:bg-pink-900/80 text-pink-700 dark:text-pink-300 font-bold border border-pink-200 dark:border-pink-800 flex items-center gap-1 shrink-0">
-                  <Heart size={9} className="fill-pink-500 text-pink-500 animate-pulse" />
-                  <span>{isIphonePreview ? 'iOS' : 'Daily'}</span>
+                  <Heart size={9} className="fill-pink-500 text-pink-500" />
+                  <span>{isIphonePreview ? 'iPhone' : 'Catatan'}</span>
                 </span>
               </div>
               <p className="text-[11px] text-rose-500/80 dark:text-pink-300/70 font-medium flex items-center gap-1 truncate">
@@ -98,7 +98,7 @@ export default function Navbar({
                       : 'text-rose-700/70 dark:text-pink-300 hover:text-rose-900'
                   }`}
                 >
-                  <Sparkles size={14} /> Ringkasan
+                  <LayoutDashboard size={14} /> Ringkasan
                 </button>
                 <button
                   onClick={() => setCurrentTab('analytics')}

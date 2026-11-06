@@ -3,7 +3,7 @@ import {
   Wallet, 
   ArrowUpRight, 
   ArrowDownRight, 
-  Sparkles,
+  Target,
   HeartHandshake
 } from 'lucide-react';
 import { formatRupiah } from '../utils/helpers';
@@ -37,7 +37,7 @@ export default function SummaryCards({
             <span className="text-[11px] font-bold uppercase tracking-wider text-pink-100 flex items-center gap-1.5">
               <Wallet size={13} /> Total Saldo Dompet
             </span>
-            <span className="px-2.5 py-0.5 rounded-full bg-white/20 backdrop-blur-md text-[10px] font-bold">
+            <span className="px-2.5 py-0.5 rounded-full bg-white/20 border border-white/30 text-[10px] font-bold">
               🌸 Firda Wallet
             </span>
           </div>
@@ -48,7 +48,7 @@ export default function SummaryCards({
           </div>
 
           {/* Glass Pill: Pemasukan & Pengeluaran side-by-side */}
-          <div className="grid grid-cols-2 gap-2.5 p-3 rounded-2xl bg-white/15 backdrop-blur-md border border-white/20">
+          <div className="grid grid-cols-2 gap-2.5 p-3 rounded-2xl bg-white/15 border border-white/20">
             <div className="flex items-center gap-2 min-w-0">
               <div className="w-8 h-8 rounded-xl bg-emerald-400/25 border border-emerald-300/40 flex items-center justify-center shrink-0">
                 <ArrowUpRight size={16} className="text-emerald-200" />
@@ -95,7 +95,7 @@ export default function SummaryCards({
               style={{ width: `${Math.min(budgetUsagePercent, 100)}%` }}
             />
           </div>
-          <div className="flex items-center justify-between text-[10px] text-gray-500 dark:text-pink-300/70 font-medium">
+          <div className="flex items-center justify-between text-[10px] text-rose-700/70 dark:text-pink-300/80 font-medium">
             <span>Terpakai {budgetUsagePercent}%</span>
             <span>Limit: {formatRupiah(totalMonthlyBudget)}</span>
           </div>
@@ -112,7 +112,7 @@ export default function SummaryCards({
               <span className="text-xs font-semibold uppercase tracking-wider text-pink-100 flex items-center gap-1.5">
                 <Wallet size={14} /> Total Saldo Tabungan
               </span>
-              <span className="p-1.5 rounded-xl bg-white/20 backdrop-blur-xs text-xs font-bold">
+              <span className="p-1.5 rounded-xl bg-white/20 border border-white/30 text-xs font-bold">
                 ✨ Cashflow
               </span>
             </div>
@@ -138,7 +138,7 @@ export default function SummaryCards({
             <div className="text-xl sm:text-2xl font-bold text-emerald-600 dark:text-emerald-400 mb-1">
               {formatRupiah(monthlyIncome)}
             </div>
-            <p className="text-xs text-gray-500 dark:text-pink-300/60">
+            <p className="text-xs text-rose-700/70 dark:text-pink-300/80">
               Uang masuk & gaji terdata
             </p>
           </div>
@@ -156,7 +156,7 @@ export default function SummaryCards({
             <div className="text-xl sm:text-2xl font-bold text-rose-600 dark:text-rose-400 mb-1">
               {formatRupiah(monthlyExpense)}
             </div>
-            <p className="text-xs text-gray-500 dark:text-pink-300/60">
+            <p className="text-xs text-rose-700/70 dark:text-pink-300/80">
               Total jajan & belanja bulanan
             </p>
           </div>
@@ -165,7 +165,7 @@ export default function SummaryCards({
           <div className="rounded-3xl bg-white dark:bg-pink-950/40 p-5 border border-pink-100 dark:border-pink-900/50 shadow-xs hover:border-pink-300 transition">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-semibold uppercase tracking-wider text-rose-500 dark:text-pink-300 flex items-center gap-1.5">
-                <Sparkles size={14} /> Sisa Budget
+                <Target size={14} /> Sisa Budget
               </span>
               <div className="w-8 h-8 rounded-full bg-pink-100 dark:bg-pink-900/60 text-pink-600 dark:text-pink-300 flex items-center justify-center text-sm font-bold">
                 🎯
@@ -186,7 +186,7 @@ export default function SummaryCards({
               />
             </div>
 
-            <div className="flex items-center justify-between text-2xs text-gray-500 dark:text-pink-300/70 font-medium">
+            <div className="flex items-center justify-between text-2xs text-rose-700/70 dark:text-pink-300/80 font-medium">
               <span>Terpakai {budgetUsagePercent}%</span>
               <span>Target: {formatRupiah(totalMonthlyBudget)}</span>
             </div>

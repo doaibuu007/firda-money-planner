@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { PieChart, Sparkles, Calendar, BarChart3 } from 'lucide-react';
+import { PieChart, Calendar, BarChart3, TrendingUp } from 'lucide-react';
 import { formatRupiah, getLocalDateString, parseLocalDate } from '../utils/helpers';
 
 export default function AnalyticsView({ transactions, expenseCategories }) {
@@ -118,17 +118,17 @@ export default function AnalyticsView({ transactions, expenseCategories }) {
     <div className="space-y-5">
       
       {/* Period Selector Pills */}
-      <div className="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-pink-950/40 p-3.5 rounded-3xl border border-pink-100 dark:border-pink-900/50 shadow-xs">
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-[#1a0f18] p-3.5 rounded-2xl border border-pink-100 dark:border-pink-900/50 shadow-xs">
         <div className="flex items-center gap-2 text-xs font-bold text-rose-900 dark:text-pink-100">
-          <Calendar size={15} className="text-pink-500" />
+          <Calendar size={15} className="text-rose-500 dark:text-pink-400" />
           <span>Periode Analisis:</span>
         </div>
-        <div className="flex items-center gap-1 bg-pink-50 dark:bg-pink-900/40 p-1 rounded-2xl border border-pink-100 dark:border-pink-800 overflow-x-auto no-scrollbar">
+        <div className="flex items-center gap-1 bg-pink-50 dark:bg-pink-900/40 p-1 rounded-xl border border-pink-100 dark:border-pink-800 overflow-x-auto no-scrollbar">
           {Object.entries(periodLabels).map(([key, label]) => (
             <button
               key={key}
               onClick={() => setSelectedPeriod(key)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition whitespace-nowrap cursor-pointer ${
                 selectedPeriod === key
                   ? 'bg-rose-500 text-white shadow-xs'
                   : 'text-rose-700 dark:text-pink-300 hover:text-rose-900'
@@ -140,26 +140,26 @@ export default function AnalyticsView({ transactions, expenseCategories }) {
         </div>
       </div>
 
-      {/* Top Banner Highlight */}
-      <div className="p-5 rounded-3xl bg-gradient-to-r from-pink-100 via-rose-100 to-pink-50 dark:from-pink-950/60 dark:to-pink-900/40 border border-pink-200 dark:border-pink-800/60 flex flex-col sm:flex-row items-center justify-between gap-4">
+      {/* Top Banner Highlight (R-04: TrendingUp icon instead of generic Sparkles) */}
+      <div className="p-5 rounded-2xl bg-pink-100/60 dark:bg-pink-950/60 border border-pink-200 dark:border-pink-800/60 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-2xl bg-white dark:bg-pink-900/80 shadow-xs flex items-center justify-center text-2xl shrink-0">
-            📊
+          <div className="w-12 h-12 rounded-xl bg-white dark:bg-pink-900/80 shadow-xs flex items-center justify-center text-rose-500 dark:text-pink-300 shrink-0">
+            <TrendingUp size={24} />
           </div>
           <div>
             <h3 className="font-bold text-rose-900 dark:text-pink-100 text-sm sm:text-base flex items-center gap-1.5">
-              Insight Keuangan ({periodLabels[selectedPeriod]}) <Sparkles size={15} className="text-pink-500" />
+              Insight Keuangan ({periodLabels[selectedPeriod]})
             </h3>
-            <p className="text-xs text-rose-700/80 dark:text-pink-300 mt-0.5">
+            <p className="text-xs text-rose-700/90 dark:text-pink-300 mt-0.5">
               {topCategory 
                 ? `Pengeluaran terbesar ada di "${topCategory.name}" (${topCategory.percentage}% dari total pengeluaran periode ini).`
-                : 'Belum ada data pengeluaran pada periode ini. Yuk mulai catat jajan kamu! 💕'}
+                : 'Belum ada data pengeluaran pada periode ini. Yuk mulai catat pengeluaran kamu!'}
             </p>
           </div>
         </div>
 
         {topCategory && (
-          <div className="bg-white/80 dark:bg-pink-900/70 px-4 py-2 rounded-2xl border border-pink-200 dark:border-pink-800 flex items-center gap-2 self-stretch sm:self-auto justify-center shrink-0">
+          <div className="bg-white/90 dark:bg-pink-900/70 px-4 py-2 rounded-xl border border-pink-200 dark:border-pink-800 flex items-center gap-2 self-stretch sm:self-auto justify-center shrink-0">
             <span className="text-xl">{topCategory.icon}</span>
             <div className="text-left">
               <span className="text-[10px] uppercase tracking-wider text-rose-500 font-bold block">Top Spending</span>
@@ -170,12 +170,12 @@ export default function AnalyticsView({ transactions, expenseCategories }) {
       </div>
 
       {/* 7-Day Daily Expense Trend Bar Chart */}
-      <div className="rounded-3xl bg-white dark:bg-pink-950/40 p-5 sm:p-6 border border-pink-100 dark:border-pink-900/50 shadow-xs">
+      <div className="rounded-2xl bg-white dark:bg-[#1a0f18] p-5 sm:p-6 border border-pink-100 dark:border-pink-900/50 shadow-xs">
         <div className="flex items-center justify-between mb-4">
           <h4 className="text-sm font-bold text-rose-900 dark:text-pink-200 flex items-center gap-2">
-            <BarChart3 size={16} className="text-pink-500" /> Tren Pengeluaran 7 Hari Terakhir
+            <BarChart3 size={16} className="text-rose-500 dark:text-pink-400" /> Tren Pengeluaran 7 Hari Terakhir
           </h4>
-          <span className="text-[11px] text-rose-500 dark:text-pink-300 font-medium">
+          <span className="text-[11px] text-rose-700 dark:text-pink-300 font-medium">
             Harian
           </span>
         </div>
@@ -186,9 +186,9 @@ export default function AnalyticsView({ transactions, expenseCategories }) {
               <span className="text-[9px] font-bold text-rose-600 dark:text-pink-300 mb-1 opacity-85 truncate max-w-full">
                 {day.spent > 0 ? `${Math.round(day.spent / 1000)}k` : '-'}
               </span>
-              <div className="w-full max-w-[34px] bg-pink-100/70 dark:bg-pink-900/40 rounded-t-xl h-20 flex items-end overflow-hidden">
+              <div className="w-full max-w-[34px] bg-pink-100/70 dark:bg-pink-900/40 rounded-t-lg h-20 flex items-end overflow-hidden">
                 <div
-                  className={`w-full rounded-t-xl transition-all duration-500 ${
+                  className={`w-full rounded-t-lg transition-all duration-500 ${
                     day.spent > 0
                       ? 'bg-gradient-to-t from-rose-500 to-pink-400'
                       : 'bg-pink-200/40 dark:bg-pink-800/30'
@@ -200,7 +200,7 @@ export default function AnalyticsView({ transactions, expenseCategories }) {
               <span className="text-[10px] font-bold text-rose-900 dark:text-pink-200 mt-1.5">
                 {day.label}
               </span>
-              <span className="text-[9px] text-gray-400 dark:text-pink-400/70">
+              <span className="text-[9px] text-rose-700/70 dark:text-pink-400">
                 {day.shortDate}
               </span>
             </div>
@@ -211,22 +211,23 @@ export default function AnalyticsView({ transactions, expenseCategories }) {
       {/* Main Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         
-        {/* SVG Donut Chart */}
-        <div className="lg:col-span-5 rounded-3xl bg-white dark:bg-pink-950/40 p-6 border border-pink-100 dark:border-pink-900/50 shadow-xs flex flex-col items-center justify-center">
+        {/* SVG Donut Chart (R-11: Dark mode track background adaptation) */}
+        <div className="lg:col-span-5 rounded-2xl bg-white dark:bg-[#1a0f18] p-6 border border-pink-100 dark:border-pink-900/50 shadow-xs flex flex-col items-center justify-center">
           <h4 className="text-sm font-bold text-rose-900 dark:text-pink-200 mb-4 flex items-center gap-2 self-start">
-            <PieChart size={16} className="text-pink-500" /> Proporsi Kategori
+            <PieChart size={16} className="text-rose-500 dark:text-pink-400" /> Proporsi Kategori
           </h4>
 
           {totalExpenseAmount > 0 ? (
             <div className="relative flex items-center justify-center my-2">
               <svg width="210" height="210" viewBox="0 0 180 180" className="transform -rotate-90">
+                {/* R-34: Adaptive background circle in dark mode */}
                 <circle
                   cx="90"
                   cy="90"
                   r={radius}
                   fill="transparent"
-                  stroke="#fce7f3"
                   strokeWidth="24"
+                  className="stroke-[#fce7f3] dark:stroke-[#2e1324]"
                 />
                 {donutSlices.map((slice, idx) => (
                   <circle
@@ -248,17 +249,17 @@ export default function AnalyticsView({ transactions, expenseCategories }) {
 
               {/* Center Donut Label */}
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
-                <span className="text-[10px] text-rose-500 dark:text-pink-300 font-semibold uppercase">Total Keluar</span>
+                <span className="text-[10px] text-rose-600 dark:text-pink-300 font-semibold uppercase">Total Keluar</span>
                 <span className="text-sm font-extrabold text-rose-900 dark:text-pink-100 mt-0.5">
                   {formatRupiah(totalExpenseAmount)}
                 </span>
-                <span className="text-[10px] text-gray-400 dark:text-pink-400">
+                <span className="text-[10px] text-rose-700/80 dark:text-pink-300/80">
                   {expenses.length} transaksi
                 </span>
               </div>
             </div>
           ) : (
-            <div className="py-12 text-center text-gray-400 dark:text-pink-400 text-xs">
+            <div className="py-12 text-center text-rose-700/70 dark:text-pink-400 text-xs">
               <p>Belum ada pengeluaran di periode ini</p>
             </div>
           )}
@@ -297,12 +298,12 @@ export default function AnalyticsView({ transactions, expenseCategories }) {
         </div>
 
         {/* Detailed Category Breakdown Bars */}
-        <div className="lg:col-span-7 rounded-3xl bg-white dark:bg-pink-950/40 p-6 border border-pink-100 dark:border-pink-900/50 shadow-xs">
+        <div className="lg:col-span-7 rounded-2xl bg-white dark:bg-[#1a0f18] p-6 border border-pink-100 dark:border-pink-900/50 shadow-xs">
           <div className="flex items-center justify-between mb-4">
             <h4 className="text-sm font-bold text-rose-900 dark:text-pink-200 flex items-center gap-2">
               <span>📋</span> Rincian Kategori ({periodLabels[selectedPeriod]})
             </h4>
-            <span className="text-xs text-rose-500 font-medium">
+            <span className="text-xs text-rose-700/80 dark:text-pink-300/80 font-medium">
               Terbesar ke terkecil
             </span>
           </div>
@@ -310,7 +311,7 @@ export default function AnalyticsView({ transactions, expenseCategories }) {
           {sortedCategories.length > 0 ? (
             <div className="space-y-3.5">
               {sortedCategories.map((cat, index) => (
-                <div key={index} className="space-y-1.5 p-2 rounded-2xl hover:bg-pink-50/50 dark:hover:bg-pink-900/20 transition">
+                <div key={index} className="space-y-1.5 p-2 rounded-xl hover:bg-pink-50/50 dark:hover:bg-pink-900/20 transition">
                   <div className="flex items-center justify-between text-xs">
                     <div className="flex items-center gap-2">
                       <span className="text-base">{cat.icon}</span>
@@ -318,7 +319,8 @@ export default function AnalyticsView({ transactions, expenseCategories }) {
                     </div>
                     <div className="text-right">
                       <span className="font-bold text-rose-900 dark:text-pink-100">{formatRupiah(cat.amount)}</span>
-                      <span className="text-gray-400 dark:text-pink-400 ml-1.5 font-medium">({cat.percentage}%)</span>
+                      {/* R-25: High contrast text on percentage */}
+                      <span className="text-rose-700/70 dark:text-pink-300/80 ml-1.5 font-medium">({cat.percentage}%)</span>
                     </div>
                   </div>
                   <div className="w-full bg-pink-100/70 dark:bg-pink-900/50 rounded-full h-2.5 overflow-hidden">
@@ -334,7 +336,7 @@ export default function AnalyticsView({ transactions, expenseCategories }) {
               ))}
             </div>
           ) : (
-            <div className="py-12 text-center text-gray-400 dark:text-pink-400 text-xs">
+            <div className="py-12 text-center text-rose-700/70 dark:text-pink-400 text-xs">
               <p>Tidak ada rincian pengeluaran pada periode ini.</p>
             </div>
           )}

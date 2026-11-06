@@ -19,7 +19,7 @@ import {
   DEFAULT_BUDGETS
 } from './constants';
 import { parseLocalDate, formatRupiah } from './utils/helpers';
-import { Heart, Smartphone, Monitor, QrCode, Wifi, Signal, Battery, RotateCcw, Sparkles } from 'lucide-react';
+import { Heart, Smartphone, Monitor, QrCode, Wifi, Signal, Battery, RotateCcw, CheckCircle } from 'lucide-react';
 
 export default function App() {
   // 1. LocalStorage States (Start clean with [] if no saved transactions yet)
@@ -396,7 +396,7 @@ export default function App() {
         <div className="min-h-screen bg-gradient-to-br from-pink-100 via-rose-50 to-pink-200 dark:from-[#160a14] dark:via-[#22101f] dark:to-[#120710] flex flex-col items-center justify-center p-4 lg:p-8 gap-6">
           
           {/* Top Mode Switcher Pill */}
-          <div className="flex items-center gap-2 bg-white/90 dark:bg-pink-950/90 backdrop-blur-md px-4 py-2 rounded-full shadow-md border border-pink-200 dark:border-pink-800">
+          <div className="flex items-center gap-2 bg-white/90 dark:bg-pink-950/90 px-4 py-2 rounded-full shadow-md border border-pink-200 dark:border-pink-800">
             <span className="text-xs font-bold text-rose-800 dark:text-pink-200 mr-1 flex items-center gap-1.5">
               🌸 Mode Tampilan:
             </span>
@@ -459,7 +459,7 @@ export default function App() {
             </div>
 
             {/* 2. Companion Card: Scan QR to Open on Real iPhone */}
-            <div className="w-full max-w-sm rounded-3xl bg-white/90 dark:bg-pink-950/80 backdrop-blur-md p-6 shadow-xl border border-pink-200 dark:border-pink-800/80 space-y-4">
+            <div className="w-full max-w-sm rounded-3xl bg-white dark:bg-pink-950/90 p-6 shadow-xl border border-pink-200 dark:border-pink-800/80 space-y-4">
               <div className="flex items-center gap-3">
                 <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-rose-500 to-pink-400 text-white flex items-center justify-center shadow-md shrink-0">
                   <QrCode size={22} />
@@ -515,6 +515,8 @@ export default function App() {
                   <img
                     src={qrImageUrl}
                     alt="Scan QR iPhone"
+                    width="144"
+                    height="144"
                     className="w-36 h-36 rounded-lg"
                   />
                 </div>
@@ -557,8 +559,8 @@ export default function App() {
 
       {/* Non-blocking Toast Notification with Undo */}
       {toast && (
-        <div className="fixed bottom-20 md:bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-rose-950/95 dark:bg-pink-900/95 text-white text-xs font-bold shadow-xl border border-pink-500/30 backdrop-blur-md animate-in fade-in duration-200">
-          <Sparkles size={14} className="text-pink-400 shrink-0" />
+        <div className="fixed bottom-20 md:bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-rose-950/95 dark:bg-pink-900/95 text-white text-xs font-bold shadow-xl border border-pink-500/30 animate-in fade-in duration-200">
+          <CheckCircle size={14} className="text-pink-400 shrink-0" />
           <span>{toast.message}</span>
           {toast.undoItem && (
             <button

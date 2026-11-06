@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Plus, Trash2, Edit3, Check } from 'lucide-react';
 
 const PRESET_EMOJIS = ['🌸', '💅', '🎀', '🛍️', '🧁', '🥤', '🐱', '📚', '🎨', '✈️', '💊', '🪴', '🍿', '🎧', '💍', '🚗'];
@@ -19,6 +19,18 @@ export default function CategoryModal({
   const [selectedColor, setSelectedColor] = useState('#ec4899');
   const [editingOriginalName, setEditingOriginalName] = useState(null);
   const [error, setError] = useState('');
+
+  // R-32: Handle Escape key to close modal
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -77,8 +89,8 @@ export default function CategoryModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 bg-black/40 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="relative w-full max-w-lg rounded-t-[32px] sm:rounded-3xl bg-white dark:bg-pink-950 p-5 sm:p-6 shadow-2xl border-t sm:border border-pink-100 dark:border-pink-900/80 max-h-[92vh] overflow-y-auto pb-safe">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 bg-black/40 animate-in fade-in duration-200">
+      <div className="relative w-full max-w-lg rounded-t-[28px] sm:rounded-2xl bg-white dark:bg-[#1a0f18] p-5 sm:p-6 shadow-2xl border-t sm:border border-pink-100 dark:border-pink-900/80 max-h-[92vh] overflow-y-auto pb-safe">
         
         {/* iOS Sheet Grabber */}
         <div className="w-12 h-1.5 bg-pink-200 dark:bg-pink-800 rounded-full mx-auto mb-3 sm:hidden" />
@@ -99,18 +111,18 @@ export default function CategoryModal({
           <button
             onClick={onClose}
             aria-label="Tutup modal kategori"
-            className="p-2 rounded-full text-gray-400 hover:text-rose-500 bg-pink-50 dark:bg-pink-900/50 transition"
+            className="p-2 rounded-xl text-gray-500 hover:text-rose-600 bg-pink-50 dark:bg-pink-900/50 transition focus-visible:ring-2 focus-visible:ring-pink-400"
           >
             <X size={18} />
           </button>
         </div>
 
         {/* Tab: Pengeluaran vs Pemasukan */}
-        <div className="grid grid-cols-2 gap-2 p-1 rounded-2xl bg-pink-50 dark:bg-pink-900/40 border border-pink-100 dark:border-pink-800 mb-4">
+        <div className="grid grid-cols-2 gap-2 p-1 rounded-xl bg-pink-50 dark:bg-pink-900/40 border border-pink-100 dark:border-pink-800 mb-4">
           <button
             type="button"
             onClick={() => { setActiveTab('expense'); resetForm(); }}
-            className={`py-2 rounded-xl text-xs font-bold transition active:scale-95 ${
+            className={`py-2 rounded-lg text-xs font-bold transition active:scale-95 ${
               activeTab === 'expense'
                 ? 'bg-rose-500 text-white shadow-xs'
                 : 'text-rose-700 dark:text-pink-300'
@@ -121,7 +133,7 @@ export default function CategoryModal({
           <button
             type="button"
             onClick={() => { setActiveTab('income'); resetForm(); }}
-            className={`py-2 rounded-xl text-xs font-bold transition active:scale-95 ${
+            className={`py-2 rounded-lg text-xs font-bold transition active:scale-95 ${
               activeTab === 'income'
                 ? 'bg-emerald-500 text-white shadow-xs'
                 : 'text-rose-700 dark:text-pink-300'
@@ -132,7 +144,7 @@ export default function CategoryModal({
         </div>
 
         {/* Form Tambah / Edit Kategori */}
-        <form onSubmit={handleSubmit} className="p-4 rounded-2xl bg-pink-50/50 dark:bg-pink-900/30 border border-pink-200 dark:border-pink-800 mb-4 space-y-3">
+        <form onSubmit={handleSubmit} className="p-4 rounded-xl bg-pink-50/50 dark:bg-pink-900/30 border border-pink-200 dark:border-pink-800 mb-4 space-y-3">
           <div className="flex items-center justify-between">
             <div className="text-xs font-bold text-rose-900 dark:text-pink-100 flex items-center gap-1.5">
               {editingOriginalName ? <Edit3 size={14} /> : <Plus size={14} />}
@@ -156,20 +168,21 @@ export default function CategoryModal({
           <div className="flex gap-2">
             <input
               type="text"
+              aria-label="Nama kategori"
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
               placeholder="Contoh: Nail Art / Salon"
-              className="grow px-3 py-2 rounded-xl bg-white dark:bg-pink-900/60 border border-pink-200 dark:border-pink-800 text-xs text-rose-950 dark:text-pink-100 focus:outline-hidden focus:ring-2 focus:ring-pink-400"
+              className="grow px-3 py-2 rounded-lg bg-white dark:bg-pink-900/60 border border-pink-200 dark:border-pink-800 text-xs text-rose-950 dark:text-pink-100 focus:outline-hidden focus:ring-2 focus:ring-pink-400"
             />
             <button
               type="submit"
-              className="px-4 py-2 rounded-xl bg-rose-500 hover:bg-rose-600 text-white font-bold text-xs shadow-xs active:scale-95 transition shrink-0 flex items-center gap-1"
+              className="px-4 py-2 rounded-lg bg-rose-500 hover:bg-rose-600 text-white font-bold text-xs shadow-xs active:scale-95 transition shrink-0 flex items-center gap-1"
             >
               {editingOriginalName ? <><Check size={13} /> Simpan</> : 'Tambah'}
             </button>
           </div>
 
-          {/* Emoji Picker */}
+          {/* Emoji Picker (R-39: accessible aria-label on each icon button) */}
           <div>
             <span className="block text-[11px] font-semibold text-rose-700 dark:text-pink-300 mb-1">
               Pilih Ikon:
@@ -179,6 +192,7 @@ export default function CategoryModal({
                 <button
                   key={em}
                   type="button"
+                  aria-label={`Pilih ikon ${em}`}
                   onClick={() => setSelectedEmoji(em)}
                   className={`w-8 h-8 rounded-lg text-sm flex items-center justify-center transition active:scale-90 ${
                     selectedEmoji === em ? 'bg-rose-500 text-white scale-110 shadow-xs' : 'bg-white dark:bg-pink-900/60 hover:bg-pink-100'
@@ -190,7 +204,7 @@ export default function CategoryModal({
             </div>
           </div>
 
-          {/* Color Picker */}
+          {/* Color Picker (R-39: accessible aria-label on color circles) */}
           <div>
             <span className="block text-[11px] font-semibold text-rose-700 dark:text-pink-300 mb-1">
               Pilih Warna Aksen:
@@ -200,6 +214,7 @@ export default function CategoryModal({
                 <button
                   key={c}
                   type="button"
+                  aria-label={`Pilih warna aksen ${c}`}
                   onClick={() => setSelectedColor(c)}
                   className={`w-6 h-6 rounded-full transition-transform ${
                     selectedColor === c ? 'scale-125 ring-2 ring-offset-2 ring-rose-400' : 'opacity-80'
@@ -213,7 +228,7 @@ export default function CategoryModal({
 
         {/* Existing Categories List */}
         <div className="space-y-2 max-h-52 overflow-y-auto pr-1">
-          <span className="text-[11px] font-bold text-gray-500 dark:text-pink-400 uppercase tracking-wider block mb-1">
+          <span className="text-[11px] font-bold text-rose-800 dark:text-pink-300 uppercase tracking-wider block mb-1">
             Daftar Kategori Aktif
           </span>
           {currentList.map((c) => (

@@ -7,8 +7,7 @@ import {
   CreditCard,
   ChevronLeft,
   ChevronRight,
-  Plus,
-  Sparkles
+  Plus
 } from 'lucide-react';
 import { formatRupiah, formatDateIndo, getLocalDateString, parseLocalDate } from '../utils/helpers';
 
@@ -92,24 +91,24 @@ export default function TransactionList({
   };
 
   return (
-    <div className="rounded-3xl bg-white dark:bg-pink-950/40 p-4 sm:p-6 border border-pink-100 dark:border-pink-900/50 shadow-xs">
+    <div className="rounded-2xl bg-white dark:bg-[#1a0f18] p-4 sm:p-6 border border-pink-100 dark:border-pink-900/50 shadow-xs">
       
       {/* Title & Segmented iOS Type Tabs */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
         <div>
-          <h3 className="text-sm sm:text-lg font-bold text-rose-900 dark:text-pink-100 flex items-center gap-1.5">
-            Riwayat Transaksi 🌸
+          <h3 className="text-sm sm:text-base font-bold text-rose-900 dark:text-pink-100">
+            Riwayat Transaksi
           </h3>
-          <p className="text-[11px] text-rose-500/80 dark:text-pink-300/70">
+          <p className="text-[11px] text-rose-700/80 dark:text-pink-300/80">
             Menampilkan {filteredTransactions.length} dari {transactions.length} catatan
           </p>
         </div>
 
         {/* iOS Segmented Control for Type */}
-        <div className="grid grid-cols-3 gap-1 bg-pink-50 dark:bg-pink-900/40 p-1 rounded-2xl border border-pink-100 dark:border-pink-800 w-full sm:w-auto">
+        <div className="grid grid-cols-3 gap-1 bg-pink-50 dark:bg-pink-900/40 p-1 rounded-xl border border-pink-100 dark:border-pink-800 w-full sm:w-auto">
           <button
             onClick={() => { setSelectedType('all'); setCurrentPage(1); }}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition active:scale-95 ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition active:scale-95 ${
               selectedType === 'all'
                 ? 'bg-rose-500 text-white shadow-xs'
                 : 'text-rose-700 dark:text-pink-300'
@@ -119,7 +118,7 @@ export default function TransactionList({
           </button>
           <button
             onClick={() => { setSelectedType('expense'); setCurrentPage(1); }}
-            className={`px-2.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1 active:scale-95 ${
+            className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1 active:scale-95 ${
               selectedType === 'expense'
                 ? 'bg-rose-500 text-white shadow-xs'
                 : 'text-rose-700 dark:text-pink-300'
@@ -129,7 +128,7 @@ export default function TransactionList({
           </button>
           <button
             onClick={() => { setSelectedType('income'); setCurrentPage(1); }}
-            className={`px-2.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1 active:scale-95 ${
+            className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1 active:scale-95 ${
               selectedType === 'income'
                 ? 'bg-emerald-500 text-white shadow-xs'
                 : 'text-rose-700 dark:text-pink-300'
@@ -140,17 +139,18 @@ export default function TransactionList({
         </div>
       </div>
 
-      {/* Filter and Search Bar Row */}
+      {/* Filter and Search Bar Row (R-10: rounded-xl; R-39: accessible aria-labels) */}
       <div className="space-y-2 sm:space-y-0 sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-2.5 mb-4">
         {/* 1. Search Bar */}
         <div className="relative">
           <Search size={15} className="absolute left-3.5 top-3 text-pink-400" />
           <input
             type="text"
+            aria-label="Cari catatan atau nominal transaksi"
             value={searchTerm}
             onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
             placeholder="Cari catatan / nominal..."
-            className="w-full pl-9 pr-3.5 py-2 rounded-2xl bg-pink-50/50 dark:bg-pink-900/30 border border-pink-100 dark:border-pink-800 text-xs text-rose-950 dark:text-pink-100 placeholder-pink-400 focus:outline-hidden focus:ring-2 focus:ring-pink-400 transition"
+            className="w-full pl-9 pr-3.5 py-2 rounded-xl bg-pink-50/50 dark:bg-pink-900/30 border border-pink-100 dark:border-pink-800 text-xs text-rose-950 dark:text-pink-100 placeholder-pink-400 focus:outline-hidden focus:ring-2 focus:ring-pink-400 transition"
           />
         </div>
 
@@ -158,9 +158,10 @@ export default function TransactionList({
         <div className="grid grid-cols-3 sm:contents gap-1.5">
           {/* 2. Category Dropdown */}
           <select
+            aria-label="Filter berdasarkan kategori"
             value={selectedCategory}
             onChange={(e) => { setSelectedCategory(e.target.value); setCurrentPage(1); }}
-            className="w-full px-2.5 py-2 rounded-2xl bg-pink-50/50 dark:bg-pink-900/30 border border-pink-100 dark:border-pink-800 text-xs text-rose-950 dark:text-pink-100 focus:outline-hidden focus:ring-2 focus:ring-pink-400 transition truncate"
+            className="w-full px-2.5 py-2 rounded-xl bg-pink-50/50 dark:bg-pink-900/30 border border-pink-100 dark:border-pink-800 text-xs text-rose-950 dark:text-pink-100 focus:outline-hidden focus:ring-2 focus:ring-pink-400 transition truncate"
           >
             <option value="all">Semua Kategori</option>
             {categories.map((c, i) => (
@@ -172,9 +173,10 @@ export default function TransactionList({
 
           {/* 3. Time Range */}
           <select
+            aria-label="Filter berdasarkan rentang waktu"
             value={selectedTimeRange}
             onChange={(e) => { setSelectedTimeRange(e.target.value); setCurrentPage(1); }}
-            className="w-full px-2.5 py-2 rounded-2xl bg-pink-50/50 dark:bg-pink-900/30 border border-pink-100 dark:border-pink-800 text-xs text-rose-950 dark:text-pink-100 focus:outline-hidden focus:ring-2 focus:ring-pink-400 transition truncate"
+            className="w-full px-2.5 py-2 rounded-xl bg-pink-50/50 dark:bg-pink-900/30 border border-pink-100 dark:border-pink-800 text-xs text-rose-950 dark:text-pink-100 focus:outline-hidden focus:ring-2 focus:ring-pink-400 transition truncate"
           >
             <option value="all">Semua Waktu</option>
             <option value="today">Hari Ini</option>
@@ -185,9 +187,10 @@ export default function TransactionList({
 
           {/* 4. Sort By */}
           <select
+            aria-label="Urutkan transaksi"
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="w-full px-2.5 py-2 rounded-2xl bg-pink-50/50 dark:bg-pink-900/30 border border-pink-100 dark:border-pink-800 text-xs text-rose-950 dark:text-pink-100 focus:outline-hidden focus:ring-2 focus:ring-pink-400 transition truncate"
+            className="w-full px-2.5 py-2 rounded-xl bg-pink-50/50 dark:bg-pink-900/30 border border-pink-100 dark:border-pink-800 text-xs text-rose-950 dark:text-pink-100 focus:outline-hidden focus:ring-2 focus:ring-pink-400 transition truncate"
           >
             <option value="date-desc">Terbaru</option>
             <option value="date-asc">Terlama</option>
@@ -199,27 +202,29 @@ export default function TransactionList({
 
       {/* Custom Date Range Inputs */}
       {selectedTimeRange === 'custom' && (
-        <div className="grid grid-cols-2 gap-2.5 p-3 mb-4 rounded-2xl bg-pink-50/60 dark:bg-pink-900/25 border border-pink-100 dark:border-pink-800">
+        <div className="grid grid-cols-2 gap-2.5 p-3 mb-4 rounded-xl bg-pink-50/60 dark:bg-pink-900/25 border border-pink-100 dark:border-pink-800">
           <div>
-            <label className="block text-[10px] font-bold text-rose-700 dark:text-pink-300 mb-1">
+            <label htmlFor="custom-start-date" className="block text-[10px] font-bold text-rose-700 dark:text-pink-300 mb-1">
               Dari Tanggal:
             </label>
             <input
+              id="custom-start-date"
               type="date"
               value={customStartDate}
               onChange={(e) => { setCustomStartDate(e.target.value); setCurrentPage(1); }}
-              className="w-full px-2.5 py-1.5 rounded-xl bg-white dark:bg-pink-950 border border-pink-200 dark:border-pink-800 text-xs text-rose-950 dark:text-pink-100"
+              className="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-pink-950 border border-pink-200 dark:border-pink-800 text-xs text-rose-950 dark:text-pink-100"
             />
           </div>
           <div>
-            <label className="block text-[10px] font-bold text-rose-700 dark:text-pink-300 mb-1">
+            <label htmlFor="custom-end-date" className="block text-[10px] font-bold text-rose-700 dark:text-pink-300 mb-1">
               Sampai Tanggal:
             </label>
             <input
+              id="custom-end-date"
               type="date"
               value={customEndDate}
               onChange={(e) => { setCustomEndDate(e.target.value); setCurrentPage(1); }}
-              className="w-full px-2.5 py-1.5 rounded-xl bg-white dark:bg-pink-950 border border-pink-200 dark:border-pink-800 text-xs text-rose-950 dark:text-pink-100"
+              className="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-pink-950 border border-pink-200 dark:border-pink-800 text-xs text-rose-950 dark:text-pink-100"
             />
           </div>
         </div>
@@ -233,11 +238,11 @@ export default function TransactionList({
             return (
               <div
                 key={item.id}
-                className="p-3 sm:p-4 rounded-2xl bg-pink-50/35 dark:bg-pink-900/20 hover:bg-pink-50/80 dark:hover:bg-pink-900/40 border border-pink-100/80 dark:border-pink-900/40 transition flex items-center justify-between gap-2.5"
+                className="p-3 sm:p-4 rounded-xl bg-pink-50/35 dark:bg-pink-900/20 hover:bg-pink-50/80 dark:hover:bg-pink-900/40 border border-pink-100/80 dark:border-pink-900/40 transition flex items-center justify-between gap-2.5"
               >
                 {/* Left: Icon & Description */}
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className={`w-10 h-10 sm:w-11 sm:h-11 rounded-2xl flex items-center justify-center text-lg sm:text-xl shrink-0 shadow-xs ${
+                  <div className={`w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center text-lg sm:text-xl shrink-0 shadow-xs ${
                     isExpense 
                       ? 'bg-rose-100 dark:bg-rose-900/50 text-rose-600' 
                       : 'bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600'
@@ -257,11 +262,12 @@ export default function TransactionList({
                       )}
                     </div>
                     
-                    <p className="text-xs text-gray-600 dark:text-pink-300/80 truncate mt-0.5">
+                    <p className="text-xs text-rose-900/80 dark:text-pink-200/90 truncate mt-0.5">
                       {item.note || 'Tanpa catatan'}
                     </p>
 
-                    <span className="text-[10px] text-gray-400 dark:text-pink-400/60 flex items-center gap-1 mt-0.5">
+                    {/* R-25: High contrast text on secondary label */}
+                    <span className="text-[10px] text-rose-700/70 dark:text-pink-300/80 flex items-center gap-1 mt-0.5">
                       <Calendar size={10} /> {formatDateIndo(item.date)}
                     </span>
                   </div>
@@ -278,12 +284,12 @@ export default function TransactionList({
                     </div>
                   </div>
 
-                  {/* Action Buttons (Always visible on iPhone/Mobile!) */}
+                  {/* Action Buttons */}
                   <div className="flex items-center gap-1">
                     <button
                       onClick={() => onEditTransaction(item)}
                       aria-label={`Edit transaksi ${item.category}`}
-                      className="p-1.5 rounded-xl text-rose-600 dark:text-pink-300 bg-white/80 dark:bg-pink-900/50 hover:bg-pink-100 border border-pink-100 dark:border-pink-800 active:scale-90 transition"
+                      className="p-1.5 rounded-lg text-rose-600 dark:text-pink-300 bg-white/80 dark:bg-pink-900/50 hover:bg-pink-100 border border-pink-100 dark:border-pink-800 active:scale-90 transition"
                       title="Edit Transaksi"
                     >
                       <Edit3 size={13} />
@@ -291,7 +297,7 @@ export default function TransactionList({
                     <button
                       onClick={() => onDeleteTransaction(item.id)}
                       aria-label={`Hapus transaksi ${item.category}`}
-                      className="p-1.5 rounded-xl text-red-500 bg-white/80 dark:bg-pink-900/50 hover:bg-red-50 border border-pink-100 dark:border-pink-800 active:scale-90 transition"
+                      className="p-1.5 rounded-lg text-red-500 bg-white/80 dark:bg-pink-900/50 hover:bg-red-50 border border-pink-100 dark:border-pink-800 active:scale-90 transition"
                       title="Hapus Transaksi"
                     >
                       <Trash2 size={13} />
@@ -310,14 +316,14 @@ export default function TransactionList({
           <p className="text-sm sm:text-base font-bold text-rose-900 dark:text-pink-100">
             Dompetmu Masih Bersih & Kosong
           </p>
-          <p className="text-xs text-rose-500/80 dark:text-pink-300/80 mt-1 mb-4 max-w-sm mx-auto">
-            Yuk mulai catat pengeluaran atau pemasukan pertamamu hari ini, atau coba muat data simulasi contoh! 💕
+          <p className="text-xs text-rose-700/80 dark:text-pink-300/80 mt-1 mb-4 max-w-sm mx-auto">
+            Yuk mulai catat pengeluaran atau pemasukan pertamamu hari ini, atau coba muat data simulasi contoh!
           </p>
           <div className="flex flex-wrap items-center justify-center gap-2">
             {onOpenAddModal && (
               <button
                 onClick={onOpenAddModal}
-                className="px-4 py-2 rounded-2xl bg-gradient-to-r from-rose-500 to-pink-500 text-white text-xs font-bold shadow-sm hover:from-rose-600 hover:to-pink-600 active:scale-95 transition flex items-center gap-1.5 cursor-pointer"
+                className="px-4 py-2 rounded-xl bg-gradient-to-r from-rose-500 to-pink-500 text-white text-xs font-bold shadow-sm hover:from-rose-600 hover:to-pink-600 active:scale-95 transition flex items-center gap-1.5 cursor-pointer"
               >
                 <Plus size={14} /> Catat Transaksi Pertama
               </button>
@@ -325,9 +331,9 @@ export default function TransactionList({
             {onLoadSampleData && (
               <button
                 onClick={onLoadSampleData}
-                className="px-4 py-2 rounded-2xl bg-pink-100 dark:bg-pink-900 text-rose-700 dark:text-pink-200 text-xs font-bold hover:bg-pink-200 active:scale-95 transition flex items-center gap-1.5 cursor-pointer"
+                className="px-4 py-2 rounded-xl bg-pink-100 dark:bg-pink-900 text-rose-700 dark:text-pink-200 text-xs font-bold hover:bg-pink-200 active:scale-95 transition flex items-center gap-1.5 cursor-pointer"
               >
-                <Sparkles size={14} /> Coba Data Contoh (Demo)
+                🌸 Coba Data Contoh (Demo)
               </button>
             )}
           </div>
@@ -338,7 +344,7 @@ export default function TransactionList({
           <p className="text-sm font-bold text-rose-900 dark:text-pink-100">
             Tidak ada transaksi yang cocok
           </p>
-          <p className="text-xs text-rose-500/70 dark:text-pink-300/70 mt-1 mb-3">
+          <p className="text-xs text-rose-700/70 dark:text-pink-300/70 mt-1 mb-3">
             Coba ganti filter atau kata kunci pencarian kamu.
           </p>
           <button
@@ -361,7 +367,7 @@ export default function TransactionList({
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
               aria-label="Halaman sebelumnya"
-              className="p-1.5 rounded-xl border border-pink-200 dark:border-pink-800 disabled:opacity-30 hover:bg-pink-100 active:scale-90 transition"
+              className="p-1.5 rounded-lg border border-pink-200 dark:border-pink-800 disabled:opacity-30 hover:bg-pink-100 active:scale-90 transition"
             >
               <ChevronLeft size={16} />
             </button>
@@ -369,7 +375,7 @@ export default function TransactionList({
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
               aria-label="Halaman berikutnya"
-              className="p-1.5 rounded-xl border border-pink-200 dark:border-pink-800 disabled:opacity-30 hover:bg-pink-100 active:scale-90 transition"
+              className="p-1.5 rounded-lg border border-pink-200 dark:border-pink-800 disabled:opacity-30 hover:bg-pink-100 active:scale-90 transition"
             >
               <ChevronRight size={16} />
             </button>
